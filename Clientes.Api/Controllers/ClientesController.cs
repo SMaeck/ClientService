@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Clientes.Api.Services;
+using Clientes.Api.DTO;
 
 namespace Clientes.Api.Controllers
 {
@@ -22,10 +23,10 @@ namespace Clientes.Api.Controllers
         {
             Log.Information("Hola");
             var clientes = _clientesService.Get();
-            
+
             if (clientes is null)
                 return NotFound("No hay clientes");
-            
+
             return Ok(clientes);
         }
 
@@ -66,7 +67,7 @@ namespace Clientes.Api.Controllers
 
             if (clienteModificado is null)
                 return NotFound($"Id {requestId} inexistente");
-            
+
             return Ok(clienteModificado);
         }
 

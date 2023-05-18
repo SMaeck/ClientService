@@ -6,7 +6,7 @@ using Clientes.Infrastructure.Repositories;
 
 namespace Clientes.Api.Services
 {
-    public class ClientesService : IService <ClienteRequestDTO, ClienteResponseDTO>
+    public class ClientesService : IService<ClienteRequestDTO, ClienteResponseDTO>
     {
         private readonly ClientesRepository _clienteRepository;
         private readonly IMapper _mapper;
@@ -69,7 +69,7 @@ namespace Clientes.Api.Services
             {
                 _logger.LogError($"Error al obtener el cliente con el id: {id}");
                 throw;
-            }          
+            }
         }
 
         public ClienteResponseDTO Update(int id, ClienteRequestDTO request)
