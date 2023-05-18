@@ -1,38 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using Web.Models;
-using Web.Services;
+using Clientes.Api.Services;
 
-namespace Web.Controllers
+namespace Clientes.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        private readonly ObtenerClientesService _obtenerClientesService;
-        private readonly BuscarClientesService _buscarClientesService;
-        private readonly AgregarClientesService _agregarClientesService;
-        private readonly ModificarClientesService _modificarClientesService;
-        private readonly EliminarClientesService _eliminarClientesService;
+        private readonly ClientesService _clientesService;
 
-        public ClientesController(ObtenerClientesService obtenerClientesService, BuscarClientesService buscarClientesService,
-                                  AgregarClientesService agregarClientesService, ModificarClientesService modificarClientesService, 
-                                  EliminarClientesService eliminarClientesService)
+        public ClientesController(ClientesService clientesService)
         {
-            _obtenerClientesService = obtenerClientesService;
-            _buscarClientesService = buscarClientesService;
-            _agregarClientesService = agregarClientesService;
-            _modificarClientesService = modificarClientesService;
-            _eliminarClientesService = eliminarClientesService;
+            _clientesService = clientesService;
         }
 
         // GET: api/Clientes
         [HttpGet]
         [Route("ObtenerClientes")]
-        public IActionResult GetClientes()
+        public IActionResult GetClients()
         {
             Log.Information("Hola");
-            var clientes = _obtenerClientesService.Execute();
+            var clientes = _clientesService.Get();
             
             if (clientes is null)
                 return NotFound("No hay clientes");
@@ -43,58 +32,55 @@ namespace Web.Controllers
         // GET: api/Clientes/5
         [HttpGet("{id}")]
         [Route("BuscarCliente")]
-        public IActionResult GetCliente(int id)
+        public IActionResult FindClient(int id)
         {
-            var cliente = _buscarClientesService.Execute(id);
+            var cliente = _clientesService.FindById(id);
 
             if (cliente is null)
-            {
-                return NotFound();
-            }
+                return NotFound("Id inexistente");
 
-            return cliente;
-        }
-
-        // PUT: api/Clientes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        [Route("ModificarCliente")]
-        public Task<IActionResult> PutCliente(int id, Cliente cliente)
-        {
-            if (id != cliente.Id)
-            {
-                return BadRequest();
-            }
-
-            var clienteModificado = _modificarClientesService.Execute(id, cliente);
-    
-            //await _clienteService.SaveChangesAsync();
-            
-            return clienteModificado;
+            return Ok(cliente);
         }
 
         // POST: api/Clientes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Route("AgregarCliente")]
-        public Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        public IActionResult CreateClient(ClienteRequestDTO request)
         {
-            var clienteNuevo = _agregarClientesService.Execute(cliente);
-            //_clienteService.SaveChangesAsync();
+            var clienteNuevo = _clientesService.Create(request);
 
-            return clienteNuevo;
+            if (clienteNuevo is null)
+                return BadRequest("Error al insertar el cliente");
+
+            return Ok(clienteNuevo);
+        }
+
+        // PUT: api/Clientes/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        [Route("ModificarCliente")]
+        public IActionResult ModifyClient(int requestId, ClienteRequestDTO requestData)
+        {
+            var clienteModificado = _clientesService.Update(requestId, requestData);
+
+            if (clienteModificado is null)
+                return NotFound($"Id {requestId} inexistente");
+            
+            return Ok(clienteModificado);
         }
 
         // DELETE: api/Clientes/5
         [HttpDelete("{id}")]
         [Route("EliminarCliente")]
-        public Task<IActionResult> DeleteCliente(int id)
+        public IActionResult DeleteClient(int id)
         {
-            var clienteEliminado = _eliminarClientesService.Execute(id);
-            
-            //await _clienteService.SaveChangesAsync();
+            var clienteEliminado = _clientesService.Delete(id);
 
-            return clienteEliminado;
+            if (clienteEliminado is null)
+                return NotFound($"Id {id} inexistente");
+
+            return Ok(clienteEliminado);
         }
     }
 }
