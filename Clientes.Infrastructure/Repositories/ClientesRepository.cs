@@ -6,7 +6,7 @@ namespace Clientes.Infrastructure.Repositories
     {
         private readonly ClienteDbContext _context;
 
-        private ClientesRepository(ClienteDbContext context)
+        public ClientesRepository(ClienteDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

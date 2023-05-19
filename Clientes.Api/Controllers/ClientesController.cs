@@ -5,8 +5,8 @@ using Clientes.Api.DTO;
 
 namespace Clientes.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ClientesController : ControllerBase
     {
         private readonly ClientesService _clientesService;
@@ -18,7 +18,6 @@ namespace Clientes.Api.Controllers
 
         // GET: api/Clientes
         [HttpGet]
-        [Route("ObtenerClientes")]
         public IActionResult GetClients()
         {
             Log.Information("Hola");
@@ -32,7 +31,6 @@ namespace Clientes.Api.Controllers
 
         // GET: api/Clientes/5
         [HttpGet("{id}")]
-        [Route("BuscarCliente")]
         public IActionResult FindClient(int id)
         {
             var cliente = _clientesService.FindById(id);
@@ -46,7 +44,6 @@ namespace Clientes.Api.Controllers
         // POST: api/Clientes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Route("AgregarCliente")]
         public IActionResult CreateClient(ClienteRequestDTO request)
         {
             var clienteNuevo = _clientesService.Create(request);
@@ -60,7 +57,6 @@ namespace Clientes.Api.Controllers
         // PUT: api/Clientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        [Route("ModificarCliente")]
         public IActionResult ModifyClient(int requestId, ClienteRequestDTO requestData)
         {
             var clienteModificado = _clientesService.Update(requestId, requestData);
@@ -73,7 +69,6 @@ namespace Clientes.Api.Controllers
 
         // DELETE: api/Clientes/5
         [HttpDelete("{id}")]
-        [Route("EliminarCliente")]
         public IActionResult DeleteClient(int id)
         {
             var clienteEliminado = _clientesService.Delete(id);

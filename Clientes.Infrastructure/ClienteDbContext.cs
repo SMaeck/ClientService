@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Clientes.Infrastructure.Entities;
-using System.Collections.Generic;
 
 namespace Clientes.Infrastructure
 {
